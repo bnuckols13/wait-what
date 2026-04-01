@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wait, What? — Neuroscience Group</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --text:       #1C1917;
+            --text-2:     #57534E;
+            --text-3:     #A8A29E;
+            --accent:     #DC2626;
+            --accent-bg:  #FEF2F2;
+            --cool:       #1D4ED8;
+            --cool-bg:    #EFF6FF;
+            --border:     #E7E5E4;
+            --bg:         #FAFAF7;
+            --surface:    #FFFFFF;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.75;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body::before {
+            content: '';
+            display: block;
+            height: 3px;
+            background: linear-gradient(90deg, var(--cool) 0%, var(--accent) 100%);
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 4rem;
+        }
+
+        /* ---- Header ---- */
+        .header { margin-bottom: 2.5rem; }
+        .header-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--cool);
+            margin-bottom: 0.75rem;
+        }
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--text);
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+        .subtitle { font-size: 1.05rem; color: var(--text-2); }
+
+        /* ---- Nav ---- */
+        .nav {
+            display: flex;
+            gap: 0.25rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2.5rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .nav button {
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            padding: 0.75rem 1rem;
+            font-family: inherit;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-3);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: color 0.15s, border-color 0.15s;
+        }
+        .nav button:hover { color: var(--text-2); }
+        .nav button.active {
+            color: var(--cool);
+            font-weight: 600;
+            border-bottom-color: var(--cool);
+        }
+
+        /* ---- Pages ---- */
+        .page { display: none; }
+        .page.active { display: block; animation: appear 0.25s ease; }
+        @keyframes appear { from { opacity: 0; } to { opacity: 1; } }
+
+        /* ---- Typography ---- */
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-3);
+            margin-bottom: 0.5rem;
+        }
+        .section-label.warm { color: var(--accent); }
+        .section-label.cool { color: var(--cool); }
+
+        h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.01em;
+            margin-bottom: 0.75rem;
+        }
+        h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+        .body-text { font-size: 0.95rem; color: var(--text-2); line-height: 1.8; }
+        .body-text + .body-text { margin-top: 0.75rem; }
+        .body-text strong { color: var(--text); font-weight: 600; }
+
+        .timing {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-3);
+            float: right;
+            margin-top: 0.2rem;
+        }
+
+        .divider { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+        /* ---- Callout ---- */
+        .callout {
+            border-left: 3px solid var(--border);
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+        }
+        .callout.warm { border-left-color: var(--accent); background: var(--accent-bg); }
+        .callout.cool { border-left-color: var(--cool); background: var(--cool-bg); }
+        .callout .callout-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-3);
+            margin-bottom: 0.4rem;
+        }
+        .callout.warm .callout-label { color: var(--accent); }
+        .callout.cool .callout-label { color: var(--cool); }
+        .callout p { font-size: 0.9rem; color: var(--text-2); line-height: 1.7; }
+        .callout p strong { color: var(--text); }
+
+        /* ---- Steps ---- */
+        .steps { margin: 1.5rem 0; }
+        .step {
+            display: flex;
+            gap: 1rem;
+            align-items: baseline;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .step:last-child { border-bottom: none; }
+        .step-num {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-3);
+            flex-shrink: 0;
+            width: 1.5rem;
+            text-align: right;
+        }
+        .step-content { flex: 1; }
+        .step-q { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+        .step-hint { font-size: 0.82rem; color: var(--text-3); margin-top: 0.15rem; line-height: 1.6; }
+
+        /* ---- Accordion ---- */
+        .accordion { margin: 1.5rem 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+        .acc-item { border-bottom: 1px solid var(--border); }
+        .acc-item:last-child { border-bottom: none; }
+        .acc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            background: var(--surface);
+            transition: background 0.15s;
+            user-select: none;
+        }
+        .acc-header:hover { background: var(--bg); }
+        .acc-title { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+        .acc-icon { font-size: 1.1rem; color: var(--text-3); transition: transform 0.2s; font-weight: 300; line-height: 1; }
+        .acc-item.open .acc-icon { transform: rotate(45deg); }
+        .acc-body { display: none; padding: 0 1.25rem 1.25rem; background: var(--surface); }
+        .acc-item.open .acc-body { display: block; }
+        .acc-body p { font-size: 0.9rem; color: var(--text-2); line-height: 1.75; }
+        .acc-body p + p { margin-top: 0.75rem; }
+        .acc-body .aside {
+            margin-top: 0.75rem; font-size: 0.85rem; font-style: italic;
+            color: var(--text-3); padding-left: 1rem; border-left: 2px solid var(--border);
+        }
+
+        /* ---- Chain ---- */
+        .chain {
+            display: flex;
+            margin: 1.5rem 0 0;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .chain-step {
+            flex: 1;
+            padding: 1rem 0.75rem;
+            text-align: center;
+            cursor: pointer;
+            border-right: 1px solid var(--border);
+            background: var(--surface);
+            transition: background 0.15s;
+        }
+        .chain-step:last-child { border-right: none; }
+        .chain-step:hover { background: var(--bg); }
+        .chain-step.active { background: var(--cool-bg); }
+        .chain-num { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); }
+        .chain-step.active .chain-num { color: var(--cool); }
+        .chain-name { font-size: 0.85rem; font-weight: 600; color: var(--text); margin-top: 0.15rem; }
+        .chain-detail {
+            display: none;
+            padding: 1.25rem;
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            background: var(--surface);
+            margin-top: -1px;
+            margin-bottom: 1.5rem;
+        }
+        .chain-detail.active { display: block; }
+        .chain-detail p { font-size: 0.9rem; color: var(--text-2); line-height: 1.75; }
+        .chain-detail p + p { margin-top: 0.75rem; }
+        .chain-example {
+            margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-3);
+            font-style: italic; padding-left: 1rem; border-left: 2px solid var(--border);
+        }
+
+        /* ---- Brain Check game ---- */
+        .game-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem 0 0.75rem;
+        }
+        .game-counter { font-size: 0.78rem; font-weight: 600; color: var(--text-3); white-space: nowrap; }
+        .game-bar-wrap { flex: 1; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+        .game-bar-fill {
+            height: 100%;
+            background: var(--cool);
+            border-radius: 2px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+        .game-score-display { font-size: 0.78rem; font-weight: 600; color: var(--cool); white-space: nowrap; }
+        .scenario-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0.5rem 0 0.75rem;
+        }
+        .scenario-body { padding: 1.5rem 1.5rem 1.25rem; background: var(--surface); }
+        .scenario-tricky {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: var(--accent-bg);
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            margin-bottom: 0.75rem;
+        }
+        .scenario-text { font-size: 0.97rem; color: var(--text); line-height: 1.8; }
+        .vote-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-top: 1px solid var(--border);
+        }
+        .vote-btn {
+            padding: 1.1rem 1rem;
+            border: none;
+            font-family: inherit;
+            font-size: 0.92rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s, opacity 0.15s;
+            background: var(--surface);
+            color: var(--text-2);
+        }
+        .vote-btn:first-child { border-right: 1px solid var(--border); }
+        .vote-btn.brain-btn:not(:disabled):hover { background: var(--accent-bg); color: var(--accent); }
+        .vote-btn.real-btn:not(:disabled):hover { background: var(--cool-bg); color: var(--cool); }
+        .vote-btn.correct.brain-btn { background: var(--accent-bg); color: var(--accent); }
+        .vote-btn.correct.real-btn { background: var(--cool-bg); color: var(--cool); }
+        .vote-btn.wrong { opacity: 0.3; }
+        .vote-btn:disabled { cursor: default; }
+        .reveal-panel {
+            display: none;
+            padding: 1.25rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg);
+        }
+        .reveal-panel.show { display: block; }
+        .reveal-trick {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.4rem;
+        }
+        .reveal-trick.is-real { color: var(--cool); }
+        .reveal-why { font-size: 0.88rem; color: var(--text-2); line-height: 1.75; }
+        .game-controls { text-align: right; margin: 0 0 1rem; }
+        .game-next-btn {
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--cool);
+            cursor: pointer;
+            padding: 0.5rem 0;
+            transition: opacity 0.15s;
+        }
+        .game-next-btn:hover { opacity: 0.7; }
+
+        /* ---- Discussion ---- */
+        .questions { margin: 1.5rem 0; }
+        .question { padding: 1rem 0; border-bottom: 1px solid var(--border); }
+        .question:last-child { border-bottom: none; }
+        .question-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-bottom: 0.3rem; }
+        .question-text { font-size: 0.95rem; font-weight: 500; color: var(--text); line-height: 1.7; }
+        .question-note { font-size: 0.82rem; font-style: italic; color: var(--text-3); margin-top: 0.3rem; }
+
+        /* ---- Page nav ---- */
+        .page-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+        .page-nav button {
+            background: none; border: none; font-family: inherit;
+            font-size: 0.9rem; font-weight: 500; color: var(--cool);
+            cursor: pointer; padding: 0.5rem 0; transition: opacity 0.15s;
+        }
+        .page-nav button:hover { opacity: 0.7; }
+        .page-nav .ghost { visibility: hidden; }
+
+        /* ---- Footer ---- */
+        .footer {
+            margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border);
+            text-align: center; font-size: 0.8rem; color: var(--text-3); line-height: 1.8;
+        }
+        .footer strong { color: var(--text-2); font-weight: 600; }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 600px) {
+            .container { padding: 2rem 1.25rem 3rem; }
+            h1 { font-size: 1.8rem; }
+            .chain { flex-direction: column; }
+            .chain-step { border-right: none; border-bottom: 1px solid var(--border); }
+            .chain-step:last-child { border-bottom: none; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header class="header">
+        <div class="header-label">Neuroscience Group · April 1</div>
+        <h1>Wait, What?</h1>
+        <p class="subtitle">Your brain has been pranking you this whole time.</p>
+    </header>
+
+    <nav class="nav">
+        <button class="active" onclick="showPage(0, this)">Welcome</button>
+        <button onclick="showPage(1, this)">The Prediction Machine</button>
+        <button onclick="showPage(2, this)">Brain Check</button>
+        <button onclick="showPage(3, this)">So What?</button>
+        <button onclick="showPage(4, this)">Discussion</button>
+        <button onclick="showPage(5, this)">Closing</button>
+    </nav>
+
+
+    <!-- ======================== WELCOME ======================== -->
+    <div class="page active">
+
+        <div class="section-label cool">Welcome</div>
+        <h2><span class="timing">8 to 10 min</span>About today</h2>
+        <p class="body-text">
+            Today we're getting into something that's genuinely strange.
+            Your brain doesn't show you reality. It shows you its best guess about reality.
+        </p>
+        <p class="body-text">
+            This isn't a metaphor — it's how your nervous system actually works. And once you see it,
+            you start noticing it everywhere: in anxiety, in memory, in how certain you feel about
+            what other people are thinking.
+        </p>
+
+        <div class="callout warm">
+            <div class="callout-label">Confidentiality</div>
+            <p>What's shared here stays here. Names, stories, details — protected. The only exception is safety.</p>
+        </div>
+
+        <hr class="divider">
+
+        <div class="section-label">Check-in</div>
+        <h2><span class="timing">8 to 10 min</span>Bridge question</h2>
+        <p class="body-text">Share your name, then answer this.</p>
+
+        <h3 style="margin-top: 1.25rem;">Think of a time recently when you were completely sure about something — what someone was feeling, how a situation was going to go, what something meant — and turned out to be wrong. What did your brain fill in?</h3>
+
+        <div class="callout" style="margin-top: 1rem;">
+            <p>Small and mundane counts. Your brain does this on tiny stuff constantly — that's exactly what makes it worth noticing.</p>
+        </div>
+
+        <div class="page-nav">
+            <button class="ghost">← Back</button>
+            <button onclick="showPage(1)">The Prediction Machine →</button>
+        </div>
+    </div>
+
+
+    <!-- ======================== THE PREDICTION MACHINE ======================== -->
+    <div class="page">
+
+        <div class="section-label cool">Core Concept</div>
+        <h2><span class="timing">15 to 20 min</span>Your brain is not a camera</h2>
+
+        <p class="body-text">
+            Your senses send your brain about <strong>11 million bits of information per second.</strong>
+            Your brain consciously processes about <strong>50.</strong>
+        </p>
+        <p class="body-text">
+            It can't process all of it — so it cheats. Instead of waiting for complete information
+            and then deciding what's there, your brain predicts what's there based on past experience,
+            context, and probability. Then it uses incoming data to check whether the prediction was right.
+        </p>
+        <p class="body-text">
+            You're not perceiving the world. You're perceiving your brain's model of the world,
+            constantly updated.
+        </p>
+
+        <div class="section-label cool" style="margin-top: 2rem;">How it works</div>
+        <h2>The prediction loop</h2>
+        <p class="body-text">Click each step.</p>
+
+        <div class="chain">
+            <div class="chain-step active" onclick="chainStep(0, this)">
+                <div class="chain-num">01</div>
+                <div class="chain-name">Predict</div>
+            </div>
+            <div class="chain-step" onclick="chainStep(1, this)">
+                <div class="chain-num">02</div>
+                <div class="chain-name">Signal arrives</div>
+            </div>
+            <div class="chain-step" onclick="chainStep(2, this)">
+                <div class="chain-num">03</div>
+                <div class="chain-name">Compare</div>
+            </div>
+            <div class="chain-step" onclick="chainStep(3, this)">
+                <div class="chain-num">04</div>
+                <div class="chain-name">Update</div>
+            </div>
+        </div>
+
+        <div class="chain-detail active" id="cd0">
+            <p><strong>Before any information arrives, your brain already has a prediction running.</strong> Based on where you are, what's happened before in similar situations, and what usually follows — your brain has already formed an expectation of what's there.</p>
+            <div class="chain-example">You walk toward your kitchen. Before you even look, your brain has already predicted the layout, the smell, the sounds. It's running the "kitchen" model.</div>
+        </div>
+        <div class="chain-detail" id="cd1">
+            <p><strong>Your senses send signals up toward the brain.</strong> But here's the counterintuitive part: most of the traffic in your brain runs top-down — from prediction centers down to sensory areas — not bottom-up from the senses. Your brain is mostly talking to itself.</p>
+            <div class="chain-example">There are more neural connections running from your visual cortex back toward your eye than from your eye up to your visual cortex.</div>
+        </div>
+        <div class="chain-detail" id="cd2">
+            <p><strong>The brain compares incoming data against its prediction.</strong> If they match closely enough, prediction confirmed. If there's a mismatch — a "prediction error" — the brain has to decide: update the model, or discount the incoming signal.</p>
+            <div class="chain-example">If you see something that doesn't fit what you expected, your brain briefly hesitates. That's the mismatch registering. That's the "wait, what?" moment.</div>
+        </div>
+        <div class="chain-detail" id="cd3">
+            <p><strong>If the prediction was wrong, update the model. If right, keep going.</strong> The goal isn't accuracy — it's efficiency. A fast, good-enough model of reality uses far less energy than rebuilding from scratch every second.</p>
+            <div class="chain-example">This is why you can drive a familiar route and arrive without remembering it. Your prediction model handled the whole thing. No update needed.</div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="section-label">Evidence</div>
+        <h2>Proof it's already happening</h2>
+
+        <div class="accordion">
+            <div class="acc-item open">
+                <div class="acc-header" onclick="toggleAcc(this)">
+                    <div class="acc-title">You have a blind spot you've never noticed</div>
+                    <div class="acc-icon">+</div>
+                </div>
+                <div class="acc-body">
+                    <p>Where your optic nerve connects to your retina, there are zero photoreceptors. Right now, in both eyes, there's a spot in your visual field where you literally cannot see. You've never noticed it because your brain fills it in — not with black, not with a gap, but with whatever it predicts should be there based on the surrounding area.</p>
+                    <p>You have been looking at your brain's fabrication your entire life and calling it "what's there."</p>
+                    <div class="aside">If your brain fills in your literal field of vision without asking — what else is it filling in?</div>
+                </div>
+            </div>
+            <div class="acc-item">
+                <div class="acc-header" onclick="toggleAcc(this)">
+                    <div class="acc-title">Consciousness lags behind your brain by half a second</div>
+                    <div class="acc-icon">+</div>
+                </div>
+                <div class="acc-body">
+                    <p>By the time you're consciously aware of something — a sound, a decision, a reaction — your brain has already processed it and begun responding. The awareness you're experiencing right now is a slightly delayed reconstruction of what already happened.</p>
+                    <p>What you experience as "deciding" is often your brain filling in a story about how you got there. Your sense of being in the driver's seat is real and partly constructed narrative at the same time.</p>
+                    <div class="aside">This is not a crisis. It's just useful to know.</div>
+                </div>
+            </div>
+            <div class="acc-item">
+                <div class="acc-header" onclick="toggleAcc(this)">
+                    <div class="acc-title">The same sensation can mean completely different things</div>
+                    <div class="acc-icon">+</div>
+                </div>
+                <div class="acc-body">
+                    <p>Racing heart, tight chest, shallow breath — the same physical state can be terror, excitement, anticipation, or attraction depending on what your brain predicts is causing it. In one study, people about to cross a suspension bridge rated a stranger as more attractive than people sitting on a nearby bench. Same arousal signal. Brain labeled it differently based on context.</p>
+                    <div class="aside">The signal is real. What it means is a construction.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-nav">
+            <button onclick="showPage(0)">← Welcome</button>
+            <button onclick="showPage(2)">Brain Check →</button>
+        </div>
+    </div>
+
+
+    <!-- ======================== BRAIN CHECK ======================== -->
+    <div class="page">
+
+        <div class="section-label warm">Practice</div>
+        <h2><span class="timing">15 to 20 min</span>Brain Check</h2>
+        <p class="body-text">
+            Read each scenario out loud. As a group: is this the brain doing its thing —
+            predicting, filling in, constructing — or a straight, reliable read on reality?
+            Vote, then click to reveal.
+        </p>
+
+        <div class="game-meta">
+            <div class="game-counter"><span id="game-n">1</span> of 8</div>
+            <div class="game-bar-wrap"><div class="game-bar-fill" id="game-bar"></div></div>
+            <div class="game-score-display"><span id="game-right">0</span> right</div>
+        </div>
+
+        <div class="scenario-card">
+            <div class="scenario-body">
+                <div class="scenario-tricky" id="scenario-tricky" style="display:none">Tricky</div>
+                <div class="scenario-text" id="scenario-text"></div>
+            </div>
+            <div class="vote-row">
+                <button class="vote-btn brain-btn" id="btn-brain" onclick="vote('brain')">🧠 Brain Job</button>
+                <button class="vote-btn real-btn" id="btn-real" onclick="vote('real')">Real Deal</button>
+            </div>
+            <div class="reveal-panel" id="reveal-panel">
+                <div class="reveal-trick" id="reveal-trick"></div>
+                <div class="reveal-why" id="reveal-why"></div>
+            </div>
+        </div>
+
+        <div class="game-controls">
+            <button class="game-next-btn" id="game-next" onclick="nextScenario()" style="display:none">Next →</button>
+            <button class="game-next-btn" id="game-reset" onclick="resetGame()" style="display:none">Play again</button>
+        </div>
+
+        <div id="game-end" style="display:none">
+            <div class="callout cool">
+                <div class="callout-label">Final score</div>
+                <p><strong id="final-score"></strong></p>
+            </div>
+            <p class="body-text" style="margin-top: 1rem;">Every single one of those was a brain job. That's not a gotcha — that's the whole session. The question was never <em>whether</em> your brain fills in gaps. It's whether you can catch it in the act.</p>
+        </div>
+
+        <div class="page-nav">
+            <button onclick="showPage(1)">← The Prediction Machine</button>
+            <button onclick="showPage(3)">So What? →</button>
+        </div>
+    </div>
+
+
+    <!-- ======================== SO WHAT? ======================== -->
+    <div class="page">
+
+        <div class="section-label cool">Why It Matters</div>
+        <h2><span class="timing">10 to 12 min</span>So what?</h2>
+        <p class="body-text">
+            None of this is just interesting trivia. If your brain is a prediction machine,
+            that changes what anxiety is, what memory is, what emotions are, and what
+            "I know exactly how they feel" actually means.
+        </p>
+
+        <div class="steps" style="margin-top: 2rem;">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <div class="step-q">Anxiety is a prediction, not a verdict.</div>
+                    <div class="step-hint">The anxious feeling is your brain's confidence in a threat prediction. That prediction can be wrong. This is why exposure works — you're not fighting the feeling, you're updating the prediction by living through the thing and not dying.</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <div class="step-q">Emotions are information, not instructions.</div>
+                    <div class="step-hint">Your brain constructs emotions from body signals plus context plus past experience. The same racing heart can be adrenaline, excitement, or dread depending on what label your brain applies. The feeling is real. What it's reporting about the outside world is often constructed.</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <div class="step-q">Your memories are reconstructions, not recordings.</div>
+                    <div class="step-hint">Every time you access a memory, you rebuild it slightly differently based on your current mood, what you now know, and how you feel about the people involved. The crystal-clear memory of how unfair something was is partly today's reconstruction. This is actually hopeful — memories aren't fixed.</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                    <div class="step-q">"I know exactly what they're thinking" is a hypothesis.</div>
+                    <div class="step-hint">The certainty you feel about someone else's internal state is your brain's confidence in its prediction. That confidence is not evidence. You could check it. You could ask. The feeling of knowing and knowing are not the same thing.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="callout warm" style="margin-top: 1rem;">
+            <div class="callout-label">The useful part</div>
+            <p>Predictions can be updated. If your brain is running outdated models — old threat predictions, old interpretations of relationships, old stories about what you're capable of — those aren't permanent. They're just the current best guess. New evidence changes them.</p>
+        </div>
+
+        <div class="page-nav">
+            <button onclick="showPage(2)">← Brain Check</button>
+            <button onclick="showPage(4)">Discussion →</button>
+        </div>
+    </div>
+
+
+    <!-- ======================== DISCUSSION ======================== -->
+    <div class="page">
+
+        <div class="section-label cool">Discussion</div>
+        <h2><span class="timing">20 to 25 min</span>Open it up</h2>
+        <p class="body-text">Starting points. No wrong answers.</p>
+
+        <div class="questions">
+            <div class="question">
+                <div class="question-label">Opening</div>
+                <div class="question-text">What's a prediction your brain runs regularly — something you feel certain about that you've never actually verified? Could be about yourself, about someone else, about how situations tend to go for you.</div>
+            </div>
+            <div class="question">
+                <div class="question-label">Anxiety</div>
+                <div class="question-text">If the anxious feeling is a prediction and not a reliable report of actual danger — does knowing that change how you relate to it? Or does it feel like just another way to dismiss it?</div>
+                <div class="question-note">Both responses are valid. Sit with whatever comes up.</div>
+            </div>
+            <div class="question">
+                <div class="question-label">Brain Check callback</div>
+                <div class="question-text">Which scenario in the game was hardest to call a brain job? What made it feel like a straight read on reality?</div>
+            </div>
+            <div class="question">
+                <div class="question-label">Memory</div>
+                <div class="question-text">Your memory of a painful event is your last reconstruction of it — not a recording. Does knowing that change anything about something you've been holding onto? Or does it feel like it shouldn't matter?</div>
+            </div>
+            <div class="question">
+                <div class="question-label">Closing round</div>
+                <div class="question-text">What would it look like to treat "I know exactly how they feel about me" as a hypothesis — just for one situation this week?</div>
+            </div>
+        </div>
+
+        <div class="callout">
+            <p>The most useful thing here is when someone catches their own brain doing something live — mid-conversation, mid-answer. That's the session working.</p>
+        </div>
+
+        <div class="page-nav">
+            <button onclick="showPage(3)">← So What?</button>
+            <button onclick="showPage(5)">Closing →</button>
+        </div>
+    </div>
+
+
+    <!-- ======================== CLOSING ======================== -->
+    <div class="page">
+
+        <div class="section-label">Closing</div>
+        <h2><span class="timing">5 to 7 min</span>One last round</h2>
+        <p class="body-text">Answer each of these before you go.</p>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <div class="step-q">What's one prediction your brain has been running that you want to look at more carefully?</div>
+                    <div class="step-hint">A certainty about how someone feels. An assumption about how something will go. An old story about yourself you've never actually tested.</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <div class="step-q">What would it take to actually check it — to get new data?</div>
+                    <div class="step-hint">Could be asking someone directly. Could be trying something you've been predicting failure on. Could just be noticing the next time the prediction fires.</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <div class="step-q">What's one thing from today that actually landed?</div>
+                    <div class="step-hint">A concept, something someone said, something you recognized in yourself.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="callout warm" style="margin-top: 2rem;">
+            <div class="callout-label">Facilitator note</div>
+            <p>
+                The goal wasn't to destabilize anyone's relationship with their own experience.
+                It was to create a little space between "the feeling" and "the fact."
+                That space is where choice lives.
+            </p>
+        </div>
+
+        <div class="page-nav">
+            <button onclick="showPage(4)">← Discussion</button>
+            <button onclick="showPage(0)">Start over</button>
+        </div>
+    </div>
+
+
+    <div class="footer">
+        <strong>Crisis support</strong><br>
+        988 Suicide & Crisis Lifeline: call or text 988<br>
+        Crisis Text Line: text HOME to 741741
+    </div>
+
+</div>
+
+<script>
+    const scenarios = [
+        {
+            text: "You text someone and they don't reply for two hours. You're completely certain they're angry at you.",
+            answer: "brain",
+            trick: "Mind reading",
+            why: "You have zero data about why they haven't replied. Your brain wrote the story. They could be in class, on a call, their phone died, or they just haven't looked. The certainty you feel is your brain's confidence in its own prediction — not information from the world.",
+            tricky: false
+        },
+        {
+            text: "You walk into a room mid-conversation. A few people glance up, then the conversation shifts. You immediately feel like you killed the vibe.",
+            answer: "brain",
+            trick: "Spotlight effect",
+            why: "The spotlight effect makes your brain dramatically overestimate how much other people are focused on you. Conversations shift constantly and for dozens of reasons. Your brain chose the interpretation that made you the cause — because that's the one that requires a response.",
+            tricky: false
+        },
+        {
+            text: "You're about to try something you've failed at before. Before you even start, your body already feels heavy and defeated.",
+            answer: "brain",
+            trick: "Predictive failure response",
+            why: "Your brain loaded the stored prediction from last time. No new data has come in yet — it's running the old model. The heaviness is the failure prediction firing before you've done anything. The body is responding to a future that hasn't happened.",
+            tricky: false
+        },
+        {
+            text: "You've been thinking about someone a lot this week. Out of nowhere, they text you. It feels like they sensed it.",
+            answer: "brain",
+            trick: "Confirmation bias",
+            why: "Your brain registers hits and ignores misses. How many times did you think about them this week and they didn't text? Those don't register as significant — they don't feel like evidence of anything. You remember the one time the timing lined up. That's the trick.",
+            tricky: false
+        },
+        {
+            text: "You stub your toe on the same corner you always stub it on. You're having a terrible day. It hurts way more than usual.",
+            answer: "brain",
+            trick: "Pain construction",
+            why: "Pain isn't purely a physical signal — your brain constructs the experience using the sensory input plus your emotional state, how much attention you're paying, and what else is happening. Same injury. Different context. Genuinely different pain. The signal is real. The intensity is partly built.",
+            tricky: true
+        },
+        {
+            text: "You meet someone new. They're quiet and don't ask you anything. You leave convinced they didn't like you.",
+            answer: "brain",
+            trick: "Threat detection from ambiguous cues",
+            why: "Your brain scanned for social threat and flagged 'quiet' and 'no questions.' Both can mean disinterest — or shyness, social anxiety, preoccupation, introversion, or just having an off day. Your brain chose the threat interpretation because missing a real threat costs more than a false alarm.",
+            tricky: false
+        },
+        {
+            text: "You remember a fight from last year in complete detail — exactly what was said, how unfair it was. The memory feels crystal clear.",
+            answer: "brain",
+            trick: "Reconstructive memory",
+            why: "Memories aren't recordings. Every time you replay one, you rebuild it from fragments — and slightly reshape it based on your current mood, what you now know, and how you feel about the people involved. The 'crystal clear' feeling is your brain's confidence in its own construction. The other person almost certainly remembers it differently. You're both right about your own reconstruction.",
+            tricky: true
+        },
+        {
+            text: "You wake up at 3am with a heavy sense of dread. Nothing happened. You don't know why. But something feels wrong.",
+            answer: "brain",
+            trick: "Nocturnal threat prediction",
+            why: "At 3am your brain is in low-input mode — minimal sensory data coming in. So it treats any ambiguous signal (mild discomfort, leftover dream fragments, blood sugar changes) as a potential threat. The dread is your prediction machine running with almost nothing to work with. The feeling is real. There is almost certainly no threat.",
+            tricky: false
+        }
+    ];
+
+    let gameIndex = 0;
+    let gameScore = 0;
+    let gameAnswered = false;
+
+    function loadScenario(i) {
+        const s = scenarios[i];
+        gameAnswered = false;
+        document.getElementById('scenario-text').textContent = s.text;
+        document.getElementById('scenario-tricky').style.display = s.tricky ? 'inline-block' : 'none';
+        document.getElementById('reveal-panel').classList.remove('show');
+        document.getElementById('reveal-trick').textContent = '';
+        document.getElementById('reveal-why').textContent = '';
+        const brainBtn = document.getElementById('btn-brain');
+        const realBtn = document.getElementById('btn-real');
+        brainBtn.disabled = false;
+        realBtn.disabled = false;
+        brainBtn.className = 'vote-btn brain-btn';
+        realBtn.className = 'vote-btn real-btn';
+        document.getElementById('game-next').style.display = 'none';
+        document.getElementById('game-reset').style.display = 'none';
+        document.getElementById('game-end').style.display = 'none';
+        document.getElementById('game-n').textContent = i + 1;
+        document.getElementById('game-bar').style.width = (i / scenarios.length * 100) + '%';
+    }
+
+    function vote(choice) {
+        if (gameAnswered) return;
+        gameAnswered = true;
+        const s = scenarios[gameIndex];
+        const isCorrect = choice === s.answer;
+        if (isCorrect) gameScore++;
+
+        const brainBtn = document.getElementById('btn-brain');
+        const realBtn = document.getElementById('btn-real');
+        brainBtn.disabled = true;
+        realBtn.disabled = true;
+
+        const correctBtn = s.answer === 'brain' ? brainBtn : realBtn;
+        correctBtn.classList.add('correct');
+        if (!isCorrect) {
+            (choice === 'brain' ? brainBtn : realBtn).classList.add('wrong');
+        }
+
+        const trickEl = document.getElementById('reveal-trick');
+        trickEl.textContent = s.trick;
+        trickEl.className = 'reveal-trick' + (s.answer === 'real' ? ' is-real' : '');
+        document.getElementById('reveal-why').textContent = s.why;
+        document.getElementById('reveal-panel').classList.add('show');
+        document.getElementById('game-right').textContent = gameScore;
+
+        if (gameIndex < scenarios.length - 1) {
+            document.getElementById('game-next').style.display = 'inline-block';
+        } else {
+            document.getElementById('game-bar').style.width = '100%';
+            document.getElementById('final-score').textContent = gameScore + ' out of 8';
+            document.getElementById('game-end').style.display = 'block';
+            document.getElementById('game-reset').style.display = 'inline-block';
+        }
+    }
+
+    function nextScenario() {
+        gameIndex++;
+        loadScenario(gameIndex);
+    }
+
+    function resetGame() {
+        gameIndex = 0;
+        gameScore = 0;
+        document.getElementById('game-right').textContent = 0;
+        loadScenario(0);
+    }
+
+    function showPage(i, btn) {
+        document.querySelectorAll('.page').forEach((p, j) => p.classList.toggle('active', j === i));
+        document.querySelectorAll('.nav button').forEach((b, j) => b.classList.toggle('active', j === i));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function chainStep(i, el) {
+        document.querySelectorAll('.chain-step').forEach(s => s.classList.remove('active'));
+        el.classList.add('active');
+        for (let j = 0; j < 4; j++) document.getElementById('cd' + j).classList.toggle('active', j === i);
+    }
+
+    function toggleAcc(header) {
+        header.closest('.acc-item').classList.toggle('open');
+    }
+
+    loadScenario(0);
+</script>
+</body>
+</html>
