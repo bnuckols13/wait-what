@@ -397,7 +397,7 @@
     <nav class="nav">
         <button class="active" onclick="showPage(0, this)">Welcome</button>
         <button onclick="showPage(1, this)">The Prediction Machine</button>
-        <button onclick="showPage(2, this)">Brain Check</button>
+        <button onclick="showPage(2, this)">Prank Test</button>
         <button onclick="showPage(3, this)">So What?</button>
         <button onclick="showPage(4, this)">Discussion</button>
         <button onclick="showPage(5, this)">Closing</button>
@@ -553,12 +553,14 @@
     <!-- ======================== BRAIN CHECK ======================== -->
     <div class="page">
 
-        <div class="section-label warm">Practice</div>
-        <h2><span class="timing">15 to 20 min</span>Brain Check</h2>
+        <div class="section-label warm">April Fools Edition</div>
+        <h2><span class="timing">15 to 20 min</span>The Prank Test</h2>
         <p class="body-text">
-            Read each scenario out loud. As a group: is this the brain doing its thing —
-            predicting, filling in, constructing — or a straight, reliable read on reality?
-            Vote, then click to reveal.
+            Eight scenarios. For each one, vote: is your brain running a prank on you,
+            or is this a straight read on reality?
+        </p>
+        <p class="body-text">
+            One of the two buttons is a trick. You'll figure out which one.
         </p>
 
         <div class="game-meta">
@@ -573,8 +575,8 @@
                 <div class="scenario-text" id="scenario-text"></div>
             </div>
             <div class="vote-row">
-                <button class="vote-btn brain-btn" id="btn-brain" onclick="vote('brain')">🧠 Brain Job</button>
-                <button class="vote-btn real-btn" id="btn-real" onclick="vote('real')">Real Deal</button>
+                <button class="vote-btn brain-btn" id="btn-brain" onclick="vote('brain')">🃏 Pranked</button>
+                <button class="vote-btn real-btn" id="btn-real" onclick="vote('real')">Not a Prank</button>
             </div>
             <div class="reveal-panel" id="reveal-panel">
                 <div class="reveal-trick" id="reveal-trick"></div>
@@ -588,11 +590,11 @@
         </div>
 
         <div id="game-end" style="display:none">
-            <div class="callout cool">
-                <div class="callout-label">Final score</div>
-                <p><strong id="final-score"></strong></p>
+            <div class="callout warm">
+                <div class="callout-label">April Fools</div>
+                <p>Every single one was a prank. There was no "Not a Prank" answer. The button was the trick. <strong>Your brain is running all eight of those — right now, all the time, without asking.</strong></p>
             </div>
-            <p class="body-text" style="margin-top: 1rem;">Every single one of those was a brain job. That's not a gotcha — that's the whole session. The question was never <em>whether</em> your brain fills in gaps. It's whether you can catch it in the act.</p>
+            <p class="body-text" style="margin-top: 1rem;">Score: <strong id="final-score"></strong>. But honestly, the only question was how many times you got got before you figured out the game.</p>
         </div>
 
         <div class="page-nav">
